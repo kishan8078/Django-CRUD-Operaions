@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <title>Task Manager</title>
+        <link rel="stylesheet" href="css/indexCSS.css" />
+        <style>
+            *{
+                font-size: 20px;
+                color: white;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+            .body{
+            margin:0;
+            padding: 0;
+            background-color:rgb(19, 28, 64);
+            display: grid;
+            grid-template-columns:50% 50% ;
+            grid-template-rows:50% 50% ;
+            
+            }
+            .add-task-form,.view-task-table,.update-task-form{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            #btn-edit{
+                background-color: rgb(165, 126, 26);
+                height: 35px;
+                width: 85px;
+                border-radius: 9px;
+            }
+            #btn-delete{
+                background-color: crimson;
+                height: 35px;
+                width: 85px;
+                border-radius: 9px;
+            }
+            #btn-add{
+                background-color: green;
+                height: 35px;
+                width: 85px;
+                border-radius: 9px;
+                color: white;
+            }
+            #btn-add:hover,#btn-update:hover,#btn-edit:hover,#btn-delete:hover{
+                cursor: pointer;
+            }
+            #btn-update{
+                background-color: rgb(33, 43, 131);
+                height: 35px;
+                width: 85px;
+                border-radius: 9px;
+                color: white;
+            }
+            table,th,td{
+                border: 4px solid black;
+                border-collapse: collapse;
+                height: 50px;
+            }
+            input{
+                border-radius: 5px;
+                height: 40px;
+                color: black;
+            }
+            tr{
+                
+            }
+            th{
+                min-width: 100px;
+            }
+        </style>
+    </head>
+    <body class="body">
+        
+        
+        <div class="add-task-form">
+            <h2>Add a Task</h2>
+            <br>
+            <form action="/add" method="POST">
+                {% csrf_token %}
+                <input type="text" name="newTask" placeholder="Enter your task here" required>
+                <input type="submit" value="Add" id="btn-add">
+            </form>
+        </div>
+    
+        <div class="view-task-table">
+            <h2>My Tasks</h2>
+            <br>
+            <table>
+                <tr>
+                    <th>Sl.No</th>
+                    <th>TASKS</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    <!-- <th>Complete?</th> -->
+                </tr>
+                {% for eachTask in allTask %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{eachTask.task}}</td>
+                    <td><a href="/edit/{{eachTask.taskId}}" ><button id="btn-edit">Edit</button></a></td>
+                    <td><a href="/delete/{{eachTask.taskId}}" ><button id="btn-delete">Delete</button></a></td>
+                    {% comment %} <td>{% if eachTask.taskIsDone: %}{% endif %}</td> {% endcomment %}
+                    <!-- <td>help</td> -->
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <div class="update-task-form">
+            <h2>Update Task</h2>
+            <br>
+            <form action="/update/{{taskToBeEdited.taskId}}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="updatedTask" value="{{taskToBeEdited.task}}" placeholder="Update your task here" required>
+                <input type="submit" value="Update" id="btn-update">
+            </form>
+        </div>
+    </body>
+</html>
+
+
+
+
+
